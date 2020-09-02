@@ -1,44 +1,45 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
 class FinanceCalculator:
     def __init__(self, self_nav_data, benchmark_nav_data=None):
-        self.self_nav_df = None
-        self.benchmark_nav_df = None
+        self_nav_df = self._load(self_nav_data)
+        benchmark_nav_df = self._load(benchmark_nav_data)
 
-        self._load(self_nav_data, benchmark_nav_data)
+        self.combo_nav_df = self._merge(self_nav_df, benchmark_nav_df)
 
-    def _load(self, self_nav_data, benchmark_nav_data):
-        def _create_date_nav_df(nav_data, benchmark=False):
+    @staticmethod
+    def _load(data):
+        def _create_date_nav_df(nav_data):
             nav, ret, c_ret = "nav", "returns", "cumulative_returns"
-            if benchmark:
-                nav, ret, c_ret = [_ + "_benchmark" for _ in [nav, ret, c_ret]]
-
             df = pd.DataFrame(nav_data, columns=["date", nav])
-            pd.to_datetime(df["date"])
-            df.set_index("date")
+            df['date'] = pd.to_datetime(df["date"])
+            df.set_index("date", inplace=True)
             df[ret] = df[nav].pct_change()
             df[c_ret] = df[ret].cumsum()
             return df
 
-        self.self_nav_df = _create_date_nav_df(self_nav_data)
-        if benchmark_nav_data:
-            self.benchmark_nav_df = _create_date_nav_df(benchmark_nav_data)
-            self.self_nav_df.join(self.benchmark_nav_df, how="inner")
+        return _create_date_nav_df(data) if data else None
+
+    @staticmethod
+    def _merge(scheme_df, benchmark_df):
+        combo_df = scheme_df.join(benchmark_df, how="left", rsuffix='_benchmark')
+        return combo_df
 
     def get_treynor(self):
         beta_df = self.get_beta()
+        print(beta_df.head())
 
-        df = self.self_nav_df
-        df.join(beta_df, how="inner")
+        df = self.combo_nav_df
+        df.join(beta_df, how="inner", rsuffix='_beta')
         df["treynor"] = (df["returns"] - df["returns_benchmark"]) / df["beta"]
         return df
 
     def get_alpha(self):
         beta_df = self.get_beta()
 
-        df = self.self_nav_df
+        df = self.combo_nav_df
         df.join(beta_df, how="inner")
         df["alpha"] = df["cumulative_returns"] - (
             df["cumulative_returns_benchmark"]
@@ -64,10 +65,10 @@ class FinanceCalculator:
         def roll(df, w):
             for i in range(df.shape[0] - w + 1):
                 yield pd.DataFrame(
-                    df.values[i : i + w, :], df.index[i : i + w], df.columns
+                    df.values[i: i + w, :], df.index[i: i + w], df.columns
                 )
 
-        df = self.self_nav_df
+        df = self.combo_nav_df.copy()
         betas = pd.concat(
             [beta(sdf) for sdf in roll(df.pct_change().dropna(), 12)], axis=1
         ).T
@@ -78,7 +79,7 @@ class FinanceCalculator:
         requires benchmark data
         """
 
-        df = self.self_nav_df
+        df = self.combo_nav_df
         df["scheme_return_when_benchmark_up"] = df["returns"].where(
             df["returns"] > 0, 0
         )
@@ -98,7 +99,7 @@ class FinanceCalculator:
         """
         requires benchmark data
         """
-        df = self.self_nav_df
+        df = self.combo_nav_df
         df["scheme_return_when_benchmark_down"] = df["returns"].where(
             df["returns"] < 0, 0
         )
@@ -120,17 +121,17 @@ class FinanceCalculator:
 
     def get_drawdown(self):
         # instead work on nav
-        df = self.self_nav_df
-        df["scheme_peak_return"] = df["returns"].rolling(window=60).max()
-        df["drawdown"] = df["returns"] - df["scheme_peak_return"]
+        df = self.combo_nav_df
+        df["scheme_peak_nav"] = df["nav"].rolling(window=60).max()
+        df["drawdown"] = df["nav"] - df["scheme_peak_nav"]
         df["drawdown %"] = -df["drawdown"] / df["scheme_peak_return"]
         return df
 
     def get_volatility(self):
-        self.self_nav_df["volatility"] = (
-            self.self_nav_df["returns"].rolling(window=60).std()
+        self.combo_nav_df["volatility"] = (
+            self.combo_nav_df["returns"].rolling(window=60).std()
         )
-        return self.self_nav_df
+        return self.combo_nav_df
 
     def get_sharpe(self):
         """
@@ -142,7 +143,7 @@ class FinanceCalculator:
                 y.mean() / y.std()
             )  # 21 days per month X 6 months = 126
 
-        df = self.self_nav_df
+        df = self.combo_nav_df
         df["rolling_sharpe"] = df["returns"].rolling(60).apply(my_rolling_sharpe)
         # df['rolling_sharpe_2'] = [my_rolling_sharpe(df.loc[d - \
         # pd.offsets.DateOffset(months=6):d, 'returns']) for d in df.index]
@@ -158,7 +159,7 @@ class FinanceCalculator:
                 y.mean() / y.std()
             )  # 21 days per month X 6 months = 126
 
-        df = self.self_nav_df
+        df = self.combo_nav_df
         df["downside_return"] = df["returns"].where(df["returns"] < 0, 0)
         df["rolling_sortino"] = (
             df["downside_return"].rolling(60).apply(my_rolling_sortino)

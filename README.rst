@@ -59,8 +59,8 @@ Overview
 
 .. end-badges
 
-A Pysimple python based tool for financial calculations of all ratios and metrics like xiir, alpha, beta, volatility,
-upside capture, sdownside capture, sortino, treynor etc.
+A simple python based tool for financial calculations of all ratios and metrics like xirr, alpha, beta, volatility,
+upside capture, downside capture, sortino ratio, treynor ratio etc.
 
 * Free software: BSD 2-Clause License
 
@@ -106,3 +106,5 @@ Note, to combine the coverage data from all the tox environments run:
       - ::
 
             PYTEST_ADDOPTS=--cov-append tox
+
+https://www.valueresearchonline.com/funds/197/sbi-large-and-midcap-fund
