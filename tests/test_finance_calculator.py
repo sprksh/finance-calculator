@@ -1,6 +1,6 @@
 
-from finance_calculator.calculators.ratio_calculator import FinanceCalculator
-from finance_calculator.cli import main
+from src.finance_calculator.calculators.ratio_calculator import FinanceCalculator
+from src.finance_calculator.cli import main
 
 benchmark_scheme_code = 'S0089095'
 benchmark_scheme_name = 'Nifty Largemidcap 250 (Total Return)'

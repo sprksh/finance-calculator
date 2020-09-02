@@ -29,10 +29,8 @@ class FinanceCalculator:
 
     def get_treynor(self):
         beta_df = self.get_beta()
-        print(beta_df.head())
-
         df = self.combo_nav_df
-        df.join(beta_df, how="inner", rsuffix='_beta')
+        df = df.join(beta_df, how="inner", rsuffix='_beta')
         df["treynor"] = (df["returns"] - df["returns_benchmark"]) / df["beta"]
         return df
 
@@ -40,7 +38,7 @@ class FinanceCalculator:
         beta_df = self.get_beta()
 
         df = self.combo_nav_df
-        df.join(beta_df, how="inner")
+        df = df.join(beta_df, how="inner")
         df["alpha"] = df["cumulative_returns"] - (
             df["cumulative_returns_benchmark"]
             + df["beta"]
@@ -60,7 +58,8 @@ class FinanceCalculator:
             X = market.values.reshape(-1, 1)
             X = np.concatenate([np.ones_like(X), X], axis=1)
             b = np.linalg.pinv(X.T.dot(X)).dot(X.T).dot(df.values)
-            return pd.Series(b[1], df.columns, name=df.index[-1])
+            beta = pd.Series(b[1], df.columns, name=df.index[-1])
+            return beta
 
         def roll(df, w):
             for i in range(df.shape[0] - w + 1):
@@ -69,9 +68,12 @@ class FinanceCalculator:
                 )
 
         df = self.combo_nav_df.copy()
-        betas = pd.concat(
-            [beta(sdf) for sdf in roll(df.pct_change().dropna(), 12)], axis=1
-        ).T
+        df = df.drop('cumulative_returns', axis=1)
+        df = df.drop('returns', axis=1)
+        df = df.drop('returns_benchmark', axis=1)
+        df = df.drop('cumulative_returns_benchmark', axis=1)
+        betas = pd.concat([beta(sdf) for sdf in roll(df.pct_change(), 12)], axis=1).T
+        betas.rename({"nav": "beta"}, axis=1, inplace=True)
         return betas
 
     def get_upside_capture(self):
@@ -124,7 +126,7 @@ class FinanceCalculator:
         df = self.combo_nav_df
         df["scheme_peak_nav"] = df["nav"].rolling(window=60).max()
         df["drawdown"] = df["nav"] - df["scheme_peak_nav"]
-        df["drawdown %"] = -df["drawdown"] / df["scheme_peak_return"]
+        df["drawdown %"] = -df["drawdown"] / df["scheme_peak_nav"]
         return df
 
     def get_volatility(self):
