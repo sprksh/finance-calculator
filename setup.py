@@ -27,7 +27,7 @@ setup(
     name='finance-calculator',
     version='0.0.0',
     license='BSD-2-Clause',
-    description='A Pysimple python based tool for financial calculations of all ratios and metrics like xiir, alpha, beta, volatility, upside capture, sdownside capture, sortino, treynor etc.',
+    description='A simple python based tool for financial calculations of all ratios and metrics like xiir, alpha, beta, volatility, upside capture, sdownside capture, sortino, treynor etc.',
     long_description='%s\n%s' % (
         re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('', read('README.rst')),
         re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('CHANGELOG.rst'))

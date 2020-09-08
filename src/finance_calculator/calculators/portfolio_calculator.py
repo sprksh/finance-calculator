@@ -1,17 +1,5 @@
 import scipy.optimize
-import datetime
 from datetime import date
-import pandas as pd
-import numpy as np
-
-
-def test(cashflows, method):
-    if method == 'sc':
-        cc = np.array([[c['date'], c['amount']] for c in cashflows])
-        x = xirr(cc)
-    else:
-        x = XIRR(cashflows).get_xirr()
-    return x
 
 
 def xnpv(rate, cashflows):
@@ -23,7 +11,6 @@ def xnpv(rate, cashflows):
     >>> xnpv(0.1, values, dates)
     -966.4345...
     """
-    # import ipdb; ipdb.set_trace()
     if rate <= -1.0:
         return float('inf')
     d0 = cashflows[0][0]    # or min(dates)
@@ -51,6 +38,7 @@ class XIRR:
     # Set maximum epsilon for end of iteration
     eps_max_rate = 1e-6
     eps_max_value = 1e-4
+    guess_vals_neg = [-0.1, -0.05, -0.025, -0.15, -0.2, -0.25, -0.3, -0.5, -0.75, -0.9]
 
     # Set maximum epsilon for end of iteration
     iter_max = 100
@@ -64,7 +52,7 @@ class XIRR:
 
     def sort_transactions(self):
         try:
-            self.transactions.sort(key=lambda x: [x["date"], -x["amount"]])
+            self.transactions.sort(key=lambda x: [x[0], -x[1]])
         except TypeError:
             self.error = True
 
@@ -72,10 +60,11 @@ class XIRR:
         # Check that values contains at least one positive value and one negative value
         positive = False
         negative = False
+        # todo: scope of improvement
         for t in self.transactions:
-            if t["amount"] > 0:
+            if t[1] > 0:
                 positive = True
-            if t["amount"] < 0:
+            if t[1] < 0:
                 negative = True
             if positive and negative:
                 break
@@ -87,7 +76,7 @@ class XIRR:
 
     def set_guess_rate(self):
         if self.guess is None:
-            if sum(k["amount"] for k in self.transactions) > 0:
+            if sum(k[1] for k in self.transactions) > 0:
                 self.guess = -0.1
             else:
                 self.guess = 0.1
@@ -95,24 +84,13 @@ class XIRR:
     def get_xirr(self):
         transactions_correct = self.check_if_correct_transactions()
         if transactions_correct and not self.error:
-            guesses_tried_neg = [
-                -0.1,
-                -0.05,
-                -0.025,
-                -0.15,
-                -0.2,
-                -0.25,
-                -0.3,
-                -0.5,
-                -0.75,
-                -0.9,
-            ]
-            guesses_tried_pos = list(map(lambda x: -x, guesses_tried_neg))
+
+            guesses_tried_pos = list(map(lambda x: -x, self.guess_vals_neg))
             self.set_guess_rate()
             if self.guess == guesses_tried_pos[0]:
                 guesses_try = guesses_tried_pos
             else:
-                guesses_try = guesses_tried_neg
+                guesses_try = self.guess_vals_neg
             guesses_try.reverse()
             tries = 0
             while tries < 1 or (self.xirr is None and len(guesses_try)):
@@ -154,7 +132,6 @@ class XIRR:
         else:
             result_rate = result_rate * 100
         return result_rate
-        # optimize.newton(lambda r: xnpv(r, cashflows), guess)
 
     def irr_result(self, rate):
         r = rate + 1
@@ -162,8 +139,8 @@ class XIRR:
         first = self.transactions[0]
 
         for t in self.transactions:
-            frac = (t["date"] - first["date"]).days / 365
-            result += t["amount"] / pow(r, frac)
+            frac = (t[0] - first[0]).days / 365
+            result += t[1] / pow(r, frac)
         return result
 
     def irr_result_deriv(self, rate):
@@ -172,12 +149,12 @@ class XIRR:
         result = 0
         first = self.transactions[0]
         for t in self.transactions:
-            frac = (t["date"] - first["date"]).days / 365
-            result -= frac * t["amount"] / pow(r, frac + 1)
+            frac = (t[0] - first[0]).days / 365
+            result -= frac * t[1] / pow(r, frac + 1)
         return result
 
     def set_guess_for_extreme_cases(self):
-        pos_amt = sum(k["amount"] for k in self.transactions if k["amount"] > 0)
-        neg_amt = abs(sum(k["amount"] for k in self.transactions if k["amount"] < 0))
-        per = (self.transactions[-1]["date"] - self.transactions[0]["date"]).days / 365
+        pos_amt = sum(k[1] for k in self.transactions if k[1] > 0)
+        neg_amt = abs(sum(k[1] for k in self.transactions if k[1] < 0))
+        per = (self.transactions[-1][0] - self.transactions[0][0]).days / 365
         self.guess = pow(neg_amt / pos_amt, 1 / per) - 1
