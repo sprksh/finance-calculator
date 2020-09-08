@@ -1,3 +1,6 @@
+from finance_calculator.calculators.portfolio_calculator import XIRR
+from finance_calculator.calculators.ratio_calculator import FinanceCalculator
+
 __version__ = '0.0.0'
 
 
@@ -31,7 +34,7 @@ sharpe:
         nav with dates (list of tuples)
         comparison nav with dates (list of tuples)
     returns:
-        
+
 beta:
     nav with dates
     comparison nav with dates

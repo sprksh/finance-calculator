@@ -14,10 +14,10 @@ cashflow_data = [
 ]
 
 
-def test_xirr_xnpv():
-    cc = np.array([c for c in cashflow_data])
-    x = xirr(cc)
-    assert x is not None
+# def test_xirr_xnpv():
+#     cc = np.array([c for c in cashflow_data])
+#     x = xirr(cc)
+#     assert x is not None
 
 
 def test_xirr_crude():
