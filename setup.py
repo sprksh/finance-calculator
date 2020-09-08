@@ -25,7 +25,7 @@ def read(*names, **kwargs):
 
 setup(
     name='finance-calculator',
-    version='0.0.0',
+    version='0.0.1',
     license='BSD-2-Clause',
     description='A simple python based tool for financial calculations of all ratios and metrics like xiir, alpha, beta, volatility, upside capture, sdownside capture, sortino, treynor etc.',
     long_description='%s\n%s' % (

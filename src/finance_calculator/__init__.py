@@ -1,7 +1,7 @@
 from finance_calculator.calculators.portfolio_calculator import XIRR
 from finance_calculator.calculators.ratio_calculator import FinanceCalculator
 
-__version__ = '0.0.0'
+__version__ = '0.0.1'
 
 
 """
