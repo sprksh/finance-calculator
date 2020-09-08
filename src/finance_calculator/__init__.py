@@ -1,3 +1,4 @@
+# flake8: noqa
 from finance_calculator.calculators.portfolio_calculator import XIRR
 from finance_calculator.calculators.ratio_calculator import FinanceCalculator
 

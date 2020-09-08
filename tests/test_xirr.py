@@ -1,7 +1,6 @@
-import numpy as np
 import datetime
 
-from src.finance_calculator.calculators.portfolio_calculator import XIRR, xirr
+from src.finance_calculator.calculators.portfolio_calculator import XIRR
 
 
 cashflow_data = [

@@ -1,5 +1,5 @@
-# import scipy.optimize
-from datetime import date
+# # import scipy.optimize
+# from datetime import date
 
 
 # def xnpv(rate, cashflows):
@@ -104,9 +104,9 @@ class XIRR:
             result_rate = self.implement_newtons_method()
             if type(result_rate) not in [float, int]:
                 return None
-        except (ZeroDivisionError, OverflowError, TypeError) as e:
+        except (ZeroDivisionError, OverflowError, TypeError):
             result_rate = None
-        except Exception as e:
+        except Exception:
             result_rate = None
         return result_rate
 
