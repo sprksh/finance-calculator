@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
 
 
 extensions = [
@@ -15,6 +17,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
 ]
+autodoc_mock_imports = ["numpy", 'pandas']
 source_suffix = '.rst'
 master_doc = 'index'
 project = 'finance_calculator'

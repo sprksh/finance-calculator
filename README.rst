@@ -10,11 +10,11 @@ Overview
     * - docs
       - |docs|
     * - tests
-      - | |travis| |appveyor| |requires|
+      - | |travis| |appveyor|
         | |codecov|
     * - package
       - | |version| |wheel| |supported-versions| |supported-implementations|
-        | |commits-since|
+
 .. |docs| image:: https://readthedocs.org/projects/finance_calculator/badge/?style=flat
     :target: https://readthedocs.org/projects/finance_calculator
     :alt: Documentation Status
@@ -27,13 +27,9 @@ Overview
     :alt: AppVeyor Build Status
     :target: https://ci.appveyor.com/project/sprksh/finance_calculator
 
-.. |requires| image:: https://requires.io/github/sprksh/finance_calculator/requirements.svg?branch=master
-    :alt: Requirements Status
-    :target: https://requires.io/github/sprksh/finance_calculator/requirements/?branch=master
-
 .. |codecov| image:: https://codecov.io/gh/sprksh/finance_calculator/branch/master/graphs/badge.svg?branch=master
     :alt: Coverage Status
-    :target: https://codecov.io/github/sprksh/finance_calculator
+    :target: https://codecov.io/github/sprksh/finance-calculator
 
 .. |version| image:: https://img.shields.io/pypi/v/finance-calculator.svg
     :alt: PyPI Package latest release
@@ -50,10 +46,6 @@ Overview
 .. |supported-implementations| image:: https://img.shields.io/pypi/implementation/finance-calculator.svg
     :alt: Supported implementations
     :target: https://pypi.org/project/finance-calculator
-
-.. |commits-since| image:: https://img.shields.io/github/commits-since/sprksh/finance_calculator/v0.0.1.svg
-    :alt: Commits since latest release
-    :target: https://github.com/sprksh/finance-calculator/compare/v0.0.1...master
 
 
 
