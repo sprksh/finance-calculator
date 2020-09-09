@@ -1,6 +1,5 @@
 # flake8: noqa
-from finance_calculator.calculators.portfolio_calculator import XIRR
-from finance_calculator.calculators.ratio_calculator import FinanceCalculator
+from finance_calculator.calculators import api
 
 __version__ = '0.0.1'
 

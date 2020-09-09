@@ -10,3 +10,4 @@ callstack
 Changelog
 Indices
 dataframe
+xirr

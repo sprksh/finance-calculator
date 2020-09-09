@@ -1,6 +1,6 @@
 import datetime
 
-from src.finance_calculator.calculators.portfolio_calculator import XIRR
+from src.finance_calculator.calculators import api as fc
 
 
 cashflow_data = [
@@ -20,5 +20,5 @@ cashflow_data = [
 
 
 def test_xirr_crude():
-    x = XIRR(cashflow_data).get_xirr()
+    x = fc.get_xirr(cashflow_data)
     assert x is not None

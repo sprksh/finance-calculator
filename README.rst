@@ -53,7 +53,7 @@ Overview
 
 .. |commits-since| image:: https://img.shields.io/github/commits-since/sprksh/finance_calculator/v0.0.1.svg
     :alt: Commits since latest release
-    :target: https://github.com/sprksh/finance_calculator/compare/v0.0.1...master
+    :target: https://github.com/sprksh/finance-calculator/compare/v0.0.1...master
 
 
 
@@ -73,14 +73,14 @@ Installation
 
 You can also install the in-development version with::
 
-    pip install https://github.com/sprksh/finance_calculator/archive/master.zip
+    pip install https://github.com/sprksh/finance-calculator/archive/master.zip
 
 
 Documentation
 =============
 
 
-https://finance_calculator.readthedocs.io/
+https://finance-calculator.readthedocs.io/
 
 
 Development

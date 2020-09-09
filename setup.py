@@ -36,7 +36,7 @@ setup(
     ),
     author='Surya Prakash',
     author_email='sprksh.j@gmail.com',
-    url='https://github.com/sprksh/finance_calculator',
+    url='https://github.com/sprksh/finance-calculator',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
@@ -66,9 +66,9 @@ setup(
         'Topic :: Utilities',
     ],
     project_urls={
-        'Documentation': 'https://finance_calculator.readthedocs.io/',
-        'Changelog': 'https://finance_calculator.readthedocs.io/en/latest/changelog.html',
-        'Issue Tracker': 'https://github.com/sprksh/finance_calculator/issues',
+        'Documentation': 'https://finance-calculator.readthedocs.io/',
+        'Changelog': 'https://finance-calculator.readthedocs.io/en/latest/changelog.html',
+        'Issue Tracker': 'https://github.com/sprksh/finance-calculator/issues',
     },
     keywords=[
         # eg: 'keyword1', 'keyword2', 'keyword3',

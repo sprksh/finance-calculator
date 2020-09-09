@@ -2,40 +2,38 @@ import numpy as np
 import pandas as pd
 
 
-class FinanceCalculator:
-    def __init__(self, self_nav_data, benchmark_nav_data=None):
-        self_nav_df = self._load(self_nav_data)
-        benchmark_nav_df = self._load(benchmark_nav_data)
+class RatioCalculator:
+    def __init__(self, nav_dataframe, benchmark_nav_dataframe=None):
+        self_nav_df = self._load(nav_dataframe)
+        benchmark_nav_df = self._load(benchmark_nav_dataframe)
 
         self.combo_nav_df = self._merge(self_nav_df, benchmark_nav_df)
 
     @staticmethod
     def _load(data):
-        def _create_date_nav_df(nav_data):
-            nav, ret, c_ret = "nav", "returns", "cumulative_returns"
-            df = pd.DataFrame(nav_data, columns=["date", nav])
-            df['date'] = pd.to_datetime(df["date"])
-            df.set_index("date", inplace=True)
-            df[ret] = df[nav].pct_change()
-            df[c_ret] = df[ret].cumsum()
-            return df
-
-        return _create_date_nav_df(data) if data else None
+        if data is None:
+            return pd.DataFrame()
+        ret, c_ret = "returns", "cumulative_returns"
+        data[ret] = data["nav"].pct_change()
+        data[c_ret] = data[ret].cumsum()
+        return data
 
     @staticmethod
     def _merge(scheme_df, benchmark_df):
-        combo_df = scheme_df.join(benchmark_df, how="left", rsuffix='_benchmark')
-        return combo_df
+        if not benchmark_df.empty:
+            combo_df = scheme_df.join(benchmark_df, how="left", rsuffix='_benchmark')
+            return combo_df
+        return scheme_df
 
-    def get_treynor(self):
-        beta_df = self.get_beta()
+    def get_treynor(self, period, window):
+        beta_df = self.get_beta(period, window)
         df = self.combo_nav_df
         df = df.join(beta_df, how="inner", rsuffix='_beta')
         df["treynor"] = (df["returns"] - df["returns_benchmark"]) / df["beta"]
         return df
 
-    def get_alpha(self):
-        beta_df = self.get_beta()
+    def get_alpha(self, period, window):
+        beta_df = self.get_beta(period, window)
 
         df = self.combo_nav_df
         df = df.join(beta_df, how="inner")
@@ -46,7 +44,7 @@ class FinanceCalculator:
         )
         return df
 
-    def get_beta(self):
+    def get_beta(self, period, window):
         """
         https://stackoverflow.com/questions/39501277/efficient-python-pandas-stock-beta-calculation-on-many-dataframes
         """
@@ -76,7 +74,7 @@ class FinanceCalculator:
         betas.rename({"nav": "beta"}, axis=1, inplace=True)
         return betas
 
-    def get_upside_capture(self):
+    def get_upside_capture(self, period, window):
         """
         requires benchmark data
         """
@@ -97,7 +95,7 @@ class FinanceCalculator:
         df["upside_capture_ratio"] = df["upside_cagr_fund"] / df["upside_cagr_index"]
         return df
 
-    def get_downside_capture(self):
+    def get_downside_capture(self, period, window):
         """
         requires benchmark data
         """
@@ -121,7 +119,7 @@ class FinanceCalculator:
         )
         return df
 
-    def get_drawdown(self):
+    def get_drawdown(self, period, window):
         # instead work on nav
         df = self.combo_nav_df
         df["scheme_peak_nav"] = df["nav"].rolling(window=60).max()
@@ -129,13 +127,13 @@ class FinanceCalculator:
         df["drawdown %"] = -df["drawdown"] / df["scheme_peak_nav"]
         return df
 
-    def get_volatility(self):
+    def get_volatility(self, period, window):
         self.combo_nav_df["volatility"] = (
             self.combo_nav_df["returns"].rolling(window=60).std()
         )
         return self.combo_nav_df
 
-    def get_sharpe(self):
+    def get_sharpe(self, period, window):
         """
         https://stackoverflow.com/questions/49091044/python-rolling-sharpe-ratio-with-pandas-or-numpy
         """
@@ -151,7 +149,7 @@ class FinanceCalculator:
         # pd.offsets.DateOffset(months=6):d, 'returns']) for d in df.index]
         return df
 
-    def get_sortino(self):
+    def get_sortino(self, period, window):
         """
         Similar to sharpe, only negative returns are considered
         """
