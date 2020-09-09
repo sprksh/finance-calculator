@@ -1,7 +1,7 @@
 # flake8: noqa
 from finance_calculator.calculators import api
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 
 """
