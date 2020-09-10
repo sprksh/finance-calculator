@@ -59,8 +59,24 @@ Overview
 
 .. end-badges
 
-A simple python based tool for financial calculations of all ratios and metrics like xirr, alpha, beta, volatility,
-upside capture, downside capture, sortino ratio, treynor ratio etc.
+A simple python tool for calculating ratios used to measure portfolio performance.
+Ratios include alpha, beta, sharpe, volatility, upside capture, downside capture, sortino ratio,
+treynor ratio, drawdown etc.
+
+It also can be used to calculating portfolio returns like XIRR. (twirr, holding period return etc. will be added).
+
+The tool is largely based on pandas and numpy and is capable of giving continuous (rolling) values of ratios
+wherever required in the form of a pandas dataframe. All data (portfolio/ navs/ market) needs to be passed in
+arguments based on the function getting called.
+
+For example
+- XIRR can be calculated from portfolio cashflows [(date, amount)].
+- Sharpe ratio will need scheme/portfolio nav [(date, nav)].
+- Alpha will need both scheme nav as well as benchmark nav.
+
+
+For definitions of above terms, check Investopedia. You can find the examples of
+few of these ratios here. https://www.valueresearchonline.com/funds/197/sbi-large-and-midcap-fund
 
 * Free software: BSD 2-Clause License
 
@@ -106,5 +122,3 @@ Note, to combine the coverage data from all the tox environments run:
       - ::
 
             PYTEST_ADDOPTS=--cov-append tox
-
-https://www.valueresearchonline.com/funds/197/sbi-large-and-midcap-fund

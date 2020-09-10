@@ -9,18 +9,19 @@ To use finance_calculator in a project::
 
 .. code-block:: python
 
-    df = fc.get_treynor(scheme_data, benchmark_data, 250, 22)
-    df = fc.get_alpha(scheme_data, benchmark_data, 250, 22)
-    df = fc.get_beta(scheme_data, benchmark_data, 250, 22)
-    df = fc.get_upside_capture(scheme_data, benchmark_data, 250, 22)
-    df = fc.get_downside_capture(scheme_data, benchmark_data, 250, 22)
-    df = fc.get_drawdown(scheme_data, 250, 22)
-    df = fc.get_volatility(scheme_data, 250, 22)
-    df = fc.get_sharpe(scheme_data, 250, 22)
-    df = fc.get_sortino(scheme_data, 250, 22)
+    drawdown = fc.get_drawdown(scheme_data, 250, 22)
+    volatility = fc.get_volatility(scheme_data, 250, 22)
+    sharpe = fc.get_sharpe(scheme_data, 250, 22)
+    sortino = fc.get_sortino(scheme_data, 250, 22)
+    treynor = fc.get_treynor(scheme_data, benchmark_data, 250, 22)
+    alpha = fc.get_alpha(scheme_data, benchmark_data, 250, 22)
+    beta = fc.get_beta(scheme_data, benchmark_data, 250, 22)
+    upside_capture = fc.get_upside_capture(scheme_data, benchmark_data, 250, 22)
+    downside_capture = fc.get_downside_capture(scheme_data, benchmark_data, 250, 22)
 
-
-If you want only current value of a given ratio, you can use ``tail=True`` as a keyword argument in all of these functions.
+If you want only current value of a given ratio, you can use ``tail=True`` as a keyword argument
+in all of these functions. With ``tail=False`` it will give a pandas dataframe with values in a
+rolling window fashion.
 
 The scheme data and the benchmark data can either be a pandas dataframe or list of tuples: (date, nav).
 

@@ -27,11 +27,10 @@ setup(
     name='finance-calculator',
     version='0.0.3',
     license='BSD-2-Clause',
-    description='A simple python based tool for financial calculations of all ratios and metrics '
-                'like xiir, alpha, beta, volatility, upside capture, sdownside capture, sortino, '
-                'treynor etc.',
-    long_description='%s\n%s' % (
+    description='A simple python tool for calculating ratios used to measure portfolio performance.',
+    long_description='%s\n%s\n%s' % (
         re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('', read('README.rst')),
+        re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('docs/usage.rst')),
         re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('CHANGELOG.rst'))
     ),
     author='Surya Prakash',
@@ -75,7 +74,7 @@ setup(
     ],
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
     install_requires=[
-        # eg: 'aspectlib==1.1.1', 'six>=1.7',
+        'numpy>=1.18.0', 'pandas>=0.25.0',
     ],
     extras_require={
         # eg:
