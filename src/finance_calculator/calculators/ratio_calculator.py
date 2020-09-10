@@ -144,7 +144,7 @@ class RatioCalculator:
             )  # 21 days per month X 6 months = 126
 
         df = self.combo_nav_df
-        df["rolling_sharpe"] = df["returns"].rolling(60).apply(my_rolling_sharpe)
+        df["sharpe"] = df["returns"].rolling(60).apply(my_rolling_sharpe)
         # df['rolling_sharpe_2'] = [my_rolling_sharpe(df.loc[d - \
         # pd.offsets.DateOffset(months=6):d, 'returns']) for d in df.index]
         return df
@@ -161,7 +161,7 @@ class RatioCalculator:
 
         df = self.combo_nav_df
         df["downside_return"] = df["returns"].where(df["returns"] < 0, 0)
-        df["rolling_sortino"] = (
+        df["sortino"] = (
             df["downside_return"].rolling(60).apply(my_rolling_sortino)
         )
         return df

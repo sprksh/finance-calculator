@@ -19,5 +19,5 @@ cashflow_data = [
 
 
 def test_xirr_crude():
-    x = fc.get_xirr(cashflow_data)
-    assert x is not None
+    xirr = fc.get_xirr(cashflow_data)
+    assert type(xirr) is float
