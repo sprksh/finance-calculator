@@ -31,7 +31,7 @@ Overview
     :alt: Coverage Status
     :target: https://codecov.io/github/sprksh/finance-calculator
 
-.. |requires| image:: https://requires.io/enterprise/sprksh/finance-calculator/requirements/?branch=master
+.. |requires| image:: https://requires.io/enterprise/sprksh/finance-calculator/requirements.svg?branch=master
     :alt: Requirements Status
     :target: https://requires.io/enterprise/sprksh/finance-calculator/requirements/?branch=master
 
