@@ -31,9 +31,9 @@ Overview
     :alt: Coverage Status
     :target: https://codecov.io/github/sprksh/finance-calculator
 
-.. |requires| image:: https://requires.io/github/sprksh/finance_calculator/requirements.svg?branch=master
+.. |requires| image:: https://requires.io/enterprise/sprksh/finance-calculator/requirements/?branch=master
     :alt: Requirements Status
-    :target: https://requires.io/github/sprksh/finance_calculator/requirements/?branch=master
+    :target: https://requires.io/enterprise/sprksh/finance-calculator/requirements/?branch=master
 
 .. |version| image:: https://img.shields.io/pypi/v/finance-calculator.svg
     :alt: PyPI Package latest release

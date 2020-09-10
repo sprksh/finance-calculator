@@ -1,4 +1,4 @@
-from src.finance_calculator.calculators import api as fc
+from finance_calculator import api as fc
 from src.finance_calculator.cli import main
 from tests.test_nav_data import scheme_data, benchmark_data
 

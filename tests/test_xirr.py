@@ -1,7 +1,6 @@
 import datetime
 
-from src.finance_calculator.calculators import api as fc
-
+from finance_calculator import api as fc
 
 cashflow_data = [
     (datetime.date(2020, 3, 1), 10000),
