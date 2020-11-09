@@ -6,3 +6,8 @@ Changelog
 ------------------
 
 * First release on PyPI.
+
+0.0.5 (2020-11-09)
+------------------
+
+* Verified values in ratios calculator
