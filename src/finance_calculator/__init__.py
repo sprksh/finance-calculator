@@ -10,6 +10,7 @@ from .api import (
     get_alpha,
     get_treynor,
     get_beta,
+    get_ratio_calculator,
 )
 
 __version__ = "__version__ = '0.0.5'"
