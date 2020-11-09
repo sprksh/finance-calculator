@@ -51,9 +51,9 @@ Overview
     :alt: Supported implementations
     :target: https://pypi.org/project/finance-calculator
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/sprksh/finance_calculator/v0.0.5.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/sprksh/finance_calculator/v0.0.6.svg
     :alt: Commits since latest release
-    :target: https://github.com/sprksh/finance-calculator/compare/v0.0.5...master
+    :target: https://github.com/sprksh/finance-calculator/compare/v0.0.6...master
 
 
 

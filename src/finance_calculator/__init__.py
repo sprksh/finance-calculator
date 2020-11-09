@@ -13,4 +13,4 @@ from .api import (
     get_ratio_calculator,
 )
 
-__version__ = "__version__ = '0.0.5'"
+__version__ = "__version__ = '0.0.6'"
