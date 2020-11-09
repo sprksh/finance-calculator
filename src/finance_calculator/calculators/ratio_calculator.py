@@ -7,8 +7,13 @@ default_risk_free_rate = 0.05
 
 
 class RatioCalculator:
-
-    def __init__(self, nav_dataframe, benchmark_nav_dataframe=None, risk_free_rate=None, annualiser=None):
+    def __init__(
+        self,
+        nav_dataframe,
+        benchmark_nav_dataframe=None,
+        risk_free_rate=None,
+        annualiser=None,
+    ):
         self_nav_df = self._load(nav_dataframe)
         self.risk_free_rate = risk_free_rate
         self.annualiser = annualiser if annualiser else days_in_year
@@ -21,7 +26,7 @@ class RatioCalculator:
         self.beta_cache = None
 
     @staticmethod
-    def _load(data, ):
+    def _load(data,):
         if data is None:
             return pd.DataFrame()
         ret = "returns"
@@ -30,7 +35,8 @@ class RatioCalculator:
         return data
 
     def create_benchmark_nav_from_risk_free_rate(self, nav_dataframe, risk_free_rate):
-        if not risk_free_rate: return None
+        if not risk_free_rate:
+            return None
         initial_value = 100
         risk_free_rate = risk_free_rate / self.annualiser
         benchmark_nav_df = nav_dataframe.filter(["nav"])
@@ -40,20 +46,22 @@ class RatioCalculator:
             count = (row.name - initial_index).days
             return initial_value * math.pow(1 + rate, count)
 
-        benchmark_nav_df["nav"] = benchmark_nav_df.apply(apply_drag, args=(initial_value, initial_index, risk_free_rate), axis=1)
+        benchmark_nav_df["nav"] = benchmark_nav_df.apply(
+            apply_drag, args=(initial_value, initial_index, risk_free_rate), axis=1
+        )
         return benchmark_nav_df.filter(["nav"])
 
     @staticmethod
     def _merge(scheme_df, benchmark_df):
         if not benchmark_df.empty:
-            combo_df = scheme_df.join(benchmark_df, how="left", rsuffix='_benchmark')
+            combo_df = scheme_df.join(benchmark_df, how="left", rsuffix="_benchmark")
             return combo_df
         return scheme_df
 
     def get_treynor(self, period=None):
         beta_df = self.get_beta(period)
         df = self.combo_nav_df
-        df = df.join(beta_df, how="inner", rsuffix='_beta')
+        df = df.join(beta_df, how="inner", rsuffix="_beta")
         df["treynor"] = (df["returns"] - df["returns_benchmark"]) / df["beta"]
         return df.filter(["treynor"])
 
@@ -85,7 +93,7 @@ class RatioCalculator:
         df = self.combo_nav_df.copy()
         df["var"] = df["returns_benchmark"].rolling(window=window).var()
         df["cov"] = df["returns_benchmark"].rolling(window=window).cov(df["returns"])
-        df["beta"] = df["cov"]/df["var"]
+        df["beta"] = df["cov"] / df["var"]
         df = df.filter(["beta"])
         self.beta_cache = df
         return df
@@ -104,11 +112,15 @@ class RatioCalculator:
         )
 
         df["upside_cagr_fund"] = (1 + df["scheme_return_when_benchmark_up"]).rolling(
-            window=window).apply(np.prod, raw=True) - 1
-        df["upside_cagr_index"] = (1 + df["benchmark_return_when_benchmark_up"]).rolling(
-            window=window).apply(np.prod, raw=True) - 1
+            window=window
+        ).apply(np.prod, raw=True) - 1
+        df["upside_cagr_index"] = (
+            1 + df["benchmark_return_when_benchmark_up"]
+        ).rolling(window=window).apply(np.prod, raw=True) - 1
 
-        df["upside_capture_ratio"] = (1 + df["upside_cagr_fund"]) / (1 + df["upside_cagr_index"])
+        df["upside_capture_ratio"] = (1 + df["upside_cagr_fund"]) / (
+            1 + df["upside_cagr_index"]
+        )
         return df
 
     def get_downside_capture(self, window):
@@ -123,10 +135,16 @@ class RatioCalculator:
             df["returns_benchmark"] < 0, 0
         )
 
-        df["downside_cagr_fund"] = (1+df["scheme_return_when_benchmark_down"]).rolling(window=window).apply(np.prod, raw=True) - 1
-        df["downside_cagr_index"] = (1+df["benchmark_return_when_benchmark_down"]).rolling(window=window).apply(np.prod, raw=True) - 1
+        df["downside_cagr_fund"] = (
+            1 + df["scheme_return_when_benchmark_down"]
+        ).rolling(window=window).apply(np.prod, raw=True) - 1
+        df["downside_cagr_index"] = (
+            1 + df["benchmark_return_when_benchmark_down"]
+        ).rolling(window=window).apply(np.prod, raw=True) - 1
 
-        df["downside_capture_ratio"] = (1 - df["downside_cagr_fund"]) / (1 - df["downside_cagr_index"])
+        df["downside_capture_ratio"] = (1 - df["downside_cagr_fund"]) / (
+            1 - df["downside_cagr_index"]
+        )
         return df
 
     def get_drawdown(self, window):
@@ -154,8 +172,8 @@ class RatioCalculator:
 
     def get_volatility(self, window):
         df = self.combo_nav_df
-        df["volatility"] = (
-            df["returns"].rolling(window=window).std() * math.sqrt(self.annualiser)
+        df["volatility"] = df["returns"].rolling(window=window).std() * math.sqrt(
+            self.annualiser
         )
         return df.filter(["volatility"])
 
@@ -171,10 +189,19 @@ class RatioCalculator:
 
         df = self.combo_nav_df
 
-        df["returns_mean"] = ((1+df["returns"].rolling(window=window).mean()) ** self.annualiser)-1
-        df["benchmark_returns_mean"] = ((1+df["returns_benchmark"].rolling(window=window).mean()) ** self.annualiser)-1
-        df["excess_returns_std"] = (df["returns"] - df["returns_benchmark"]).rolling(window=window).std() * math.sqrt(self.annualiser)
-        df["sharpe"] = (df["returns_mean"] - df["benchmark_returns_mean"]) / df["excess_returns_std"]
+        df["returns_mean"] = (
+            (1 + df["returns"].rolling(window=window).mean()) ** self.annualiser
+        ) - 1
+        df["benchmark_returns_mean"] = (
+            (1 + df["returns_benchmark"].rolling(window=window).mean())
+            ** self.annualiser
+        ) - 1
+        df["excess_returns_std"] = (df["returns"] - df["returns_benchmark"]).rolling(
+            window=window
+        ).std() * math.sqrt(self.annualiser)
+        df["sharpe"] = (df["returns_mean"] - df["benchmark_returns_mean"]) / df[
+            "excess_returns_std"
+        ]
 
         return df.filter(["sharpe"])
 
@@ -184,14 +211,23 @@ class RatioCalculator:
         """
         df = self.combo_nav_df
 
-        df["returns_mean"] = ((1 + df["returns"].rolling(window=window).mean()) ** self.annualiser) - 1
-        df["benchmark_returns_mean"] = ((1 + df["returns_benchmark"].rolling(window=window).mean()) ** self.annualiser) - 1
+        df["returns_mean"] = (
+            (1 + df["returns"].rolling(window=window).mean()) ** self.annualiser
+        ) - 1
+        df["benchmark_returns_mean"] = (
+            (1 + df["returns_benchmark"].rolling(window=window).mean())
+            ** self.annualiser
+        ) - 1
         df["excess_returns"] = df["returns"] - df["returns_benchmark"]
-        df["excess_returns_downside"] = df["excess_returns"].where(df["excess_returns"] < 0, 0)
-        df["downside_excess_returns_std"] = df["excess_returns_downside"].rolling(window=window).std() * math.sqrt(self.annualiser)
+        df["excess_returns_downside"] = df["excess_returns"].where(
+            df["excess_returns"] < 0, 0
+        )
+        df["downside_excess_returns_std"] = df["excess_returns_downside"].rolling(
+            window=window
+        ).std() * math.sqrt(self.annualiser)
 
-        df["sortino"] = (
-                         df["returns_mean"] - df["benchmark_returns_mean"]
-                     ) / df["downside_excess_returns_std"]
+        df["sortino"] = (df["returns_mean"] - df["benchmark_returns_mean"]) / df[
+            "downside_excess_returns_std"
+        ]
 
         return df.filter(["sortino"])

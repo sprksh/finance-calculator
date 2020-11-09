@@ -34,6 +34,7 @@
 
 # noinspection PyBroadException
 
+
 class XIRR:
     # Set maximum epsilon for end of iteration
     eps_max_rate = 1e-6

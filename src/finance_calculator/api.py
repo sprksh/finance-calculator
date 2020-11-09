@@ -65,7 +65,7 @@ def _convert_data_to_df(nav_data):
     return df
 
 
-def get_drawdown(nav_data, window=250*3, annualiser=250, tail=True):
+def get_drawdown(nav_data, window=250 * 3, annualiser=250, tail=True):
     """
     A drawdown is a peak-to-trough decline during a specific period for an investment,
     trading account, or fund. A drawdown is usually quoted as the percentage between the
@@ -88,7 +88,7 @@ def get_drawdown(nav_data, window=250*3, annualiser=250, tail=True):
     return float(df["drawdown"][-1]) if tail else df
 
 
-def get_volatility(nav_data, window=250*3, annualiser=250, tail=True):
+def get_volatility(nav_data, window=250 * 3, annualiser=250, tail=True):
     """
     Volatility is a statistical measure of the dispersion of returns for a given security
     or market index. In most cases, the higher the volatility, the riskier the security.
@@ -106,7 +106,14 @@ def get_volatility(nav_data, window=250*3, annualiser=250, tail=True):
     return float(df["volatility"][-1]) if tail else df
 
 
-def get_sharpe(nav_data, benchmark_nav_data, risk_free_rate=None, window=250*3, annualiser=250, tail=True):
+def get_sharpe(
+    nav_data,
+    benchmark_nav_data,
+    risk_free_rate=None,
+    window=250 * 3,
+    annualiser=250,
+    tail=True,
+):
     """
     The Sharpe ratio was developed by Nobel laureate William F. Sharpe and is used to help
     investors understand the return of an investment compared to its risk.﻿ The ratio is the
@@ -124,12 +131,22 @@ def get_sharpe(nav_data, benchmark_nav_data, risk_free_rate=None, window=250*3, 
     nav_dataframe = _transform_df(nav_data)
     benchmark_nav_dataframe = _transform_df(benchmark_nav_data)
     df = RatioCalculator(
-        nav_dataframe, benchmark_nav_dataframe=benchmark_nav_dataframe,
-        risk_free_rate=risk_free_rate, annualiser=annualiser).get_sharpe(window)
+        nav_dataframe,
+        benchmark_nav_dataframe=benchmark_nav_dataframe,
+        risk_free_rate=risk_free_rate,
+        annualiser=annualiser,
+    ).get_sharpe(window)
     return float(df["sharpe"][-1]) if tail else df
 
 
-def get_sortino(nav_data, benchmark_nav_data, risk_free_rate=None, window=250*3, annualiser=250, tail=True):
+def get_sortino(
+    nav_data,
+    benchmark_nav_data,
+    risk_free_rate=None,
+    window=250 * 3,
+    annualiser=250,
+    tail=True,
+):
     """
     The Sortino ratio is a variation of the Sharpe ratio that differentiates harmful volatility
     from total overall volatility by using the asset's standard deviation of negative portfolio
@@ -148,12 +165,22 @@ def get_sortino(nav_data, benchmark_nav_data, risk_free_rate=None, window=250*3,
     nav_dataframe = _transform_df(nav_data)
     benchmark_nav_dataframe = _transform_df(benchmark_nav_data)
     df = RatioCalculator(
-        nav_dataframe, benchmark_nav_dataframe=benchmark_nav_dataframe,
-        risk_free_rate=risk_free_rate, annualiser=annualiser).get_sortino(window)
+        nav_dataframe,
+        benchmark_nav_dataframe=benchmark_nav_dataframe,
+        risk_free_rate=risk_free_rate,
+        annualiser=annualiser,
+    ).get_sortino(window)
     return float(df["sortino"][-1]) if tail else df
 
 
-def get_treynor(nav_data, benchmark_nav_data, risk_free_rate=None, window=250*3, annualiser=250, tail=True):
+def get_treynor(
+    nav_data,
+    benchmark_nav_data,
+    risk_free_rate=None,
+    window=250 * 3,
+    annualiser=250,
+    tail=True,
+):
     """
     The Treynor ratio, also known as the reward-to-volatility ratio, is a performance metric for
     determining how much excess return was generated for each unit of risk taken on by a portfolio.
@@ -170,13 +197,22 @@ def get_treynor(nav_data, benchmark_nav_data, risk_free_rate=None, window=250*3,
     nav_dataframe = _transform_df(nav_data)
     benchmark_nav_dataframe = _transform_df(benchmark_nav_data)
     df = RatioCalculator(
-        nav_dataframe, benchmark_nav_dataframe=benchmark_nav_dataframe,
-        risk_free_rate=risk_free_rate, annualiser=annualiser
+        nav_dataframe,
+        benchmark_nav_dataframe=benchmark_nav_dataframe,
+        risk_free_rate=risk_free_rate,
+        annualiser=annualiser,
     ).get_treynor(window)
     return float(df["treynor"][-1]) if tail else df
 
 
-def get_alpha(nav_data, benchmark_nav_data, risk_free_rate=None, window=250*3, annualiser=250, tail=True):
+def get_alpha(
+    nav_data,
+    benchmark_nav_data,
+    risk_free_rate=None,
+    window=250 * 3,
+    annualiser=250,
+    tail=True,
+):
     """
     Alpha describes a strategy's ability to beat the market, or it's "edge." Alpha is thus also
     often referred to as “excess return” or “abnormal rate of return,” which refers to the idea
@@ -196,13 +232,22 @@ def get_alpha(nav_data, benchmark_nav_data, risk_free_rate=None, window=250*3, a
     nav_dataframe = _transform_df(nav_data)
     benchmark_nav_dataframe = _transform_df(benchmark_nav_data)
     df = RatioCalculator(
-        nav_dataframe, benchmark_nav_dataframe=benchmark_nav_dataframe,
-        risk_free_rate=risk_free_rate, annualiser=annualiser
+        nav_dataframe,
+        benchmark_nav_dataframe=benchmark_nav_dataframe,
+        risk_free_rate=risk_free_rate,
+        annualiser=annualiser,
     ).get_alpha(window)
     return float(df["alpha"][-1]) if tail else df
 
 
-def get_beta(nav_data, benchmark_nav_data, risk_free_rate=None, window=250*3, annualiser=250, tail=True):
+def get_beta(
+    nav_data,
+    benchmark_nav_data,
+    risk_free_rate=None,
+    window=250 * 3,
+    annualiser=250,
+    tail=True,
+):
     """
     Beta is a measure of the volatility—or systematic risk—of a security or portfolio compared
     to the market as a whole. Beta is used in the capital asset pricing model (CAPM), which
@@ -221,13 +266,22 @@ def get_beta(nav_data, benchmark_nav_data, risk_free_rate=None, window=250*3, an
     nav_dataframe = _transform_df(nav_data)
     benchmark_nav_dataframe = _transform_df(benchmark_nav_data)
     df = RatioCalculator(
-        nav_dataframe, benchmark_nav_dataframe=benchmark_nav_dataframe,
-        risk_free_rate=risk_free_rate, annualiser=annualiser
+        nav_dataframe,
+        benchmark_nav_dataframe=benchmark_nav_dataframe,
+        risk_free_rate=risk_free_rate,
+        annualiser=annualiser,
     ).get_beta(window)
     return float(df["beta"][-1]) if tail else df
 
 
-def get_upside_capture(nav_data, benchmark_nav_data, risk_free_rate=None, window=250*3, annualiser=250, tail=True):
+def get_upside_capture(
+    nav_data,
+    benchmark_nav_data,
+    risk_free_rate=None,
+    window=250 * 3,
+    annualiser=250,
+    tail=True,
+):
     """
     The up-market capture ratio is the statistical measure of an investment manager's overall
     performance in up-markets. It is used to evaluate how well an investment manager performed
@@ -246,13 +300,22 @@ def get_upside_capture(nav_data, benchmark_nav_data, risk_free_rate=None, window
     nav_dataframe = _transform_df(nav_data)
     benchmark_nav_dataframe = _transform_df(benchmark_nav_data)
     df = RatioCalculator(
-        nav_dataframe, benchmark_nav_dataframe=benchmark_nav_dataframe,
-        risk_free_rate=risk_free_rate, annualiser=annualiser
+        nav_dataframe,
+        benchmark_nav_dataframe=benchmark_nav_dataframe,
+        risk_free_rate=risk_free_rate,
+        annualiser=annualiser,
     ).get_upside_capture(window)
     return float(df["upside_capture_ratio"][-1]) if tail else df
 
 
-def get_downside_capture(nav_data, benchmark_nav_data, risk_free_rate=None, window=250*3, annualiser=250, tail=True):
+def get_downside_capture(
+    nav_data,
+    benchmark_nav_data,
+    risk_free_rate=None,
+    window=250 * 3,
+    annualiser=250,
+    tail=True,
+):
     """
     The down-market capture ratio is a statistical measure of an investment manager's overall
     performance in down-markets. It is used to evaluate how well an investment manager performed
@@ -271,13 +334,17 @@ def get_downside_capture(nav_data, benchmark_nav_data, risk_free_rate=None, wind
     nav_dataframe = _transform_df(nav_data)
     benchmark_nav_dataframe = _transform_df(benchmark_nav_data)
     df = RatioCalculator(
-        nav_dataframe, benchmark_nav_dataframe=benchmark_nav_dataframe,
-        risk_free_rate=risk_free_rate, annualiser=annualiser
+        nav_dataframe,
+        benchmark_nav_dataframe=benchmark_nav_dataframe,
+        risk_free_rate=risk_free_rate,
+        annualiser=annualiser,
     ).get_downside_capture(window)
     return float(df["downside_capture_ratio"][-1]) if tail else df
 
 
-def get_ratio_calculator(nav_data, benchmark_nav_data=None, risk_free_rate=None, annualiser=250):
+def get_ratio_calculator(
+    nav_data, benchmark_nav_data=None, risk_free_rate=None, annualiser=250
+):
     """
     returns a ratio calculator instance which can be used to call functions as below
     >>> import finance_calculator as fc
@@ -296,7 +363,9 @@ def get_ratio_calculator(nav_data, benchmark_nav_data=None, risk_free_rate=None,
     nav_dataframe = _transform_df(nav_data)
     benchmark_nav_dataframe = _transform_df(benchmark_nav_data)
     ratio_calculator = RatioCalculator(
-        nav_dataframe, benchmark_nav_dataframe=benchmark_nav_dataframe,
-        risk_free_rate=risk_free_rate, annualiser=annualiser
+        nav_dataframe,
+        benchmark_nav_dataframe=benchmark_nav_dataframe,
+        risk_free_rate=risk_free_rate,
+        annualiser=annualiser,
     )
     return ratio_calculator
