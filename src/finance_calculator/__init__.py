@@ -12,4 +12,4 @@ from .api import (
     get_beta,
 )
 
-__version__ = "0.0.4"
+__version__ = "__version__ = '0.0.5'"

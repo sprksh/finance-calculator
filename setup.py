@@ -25,7 +25,7 @@ def read(*names, **kwargs):
 
 setup(
     name='finance-calculator',
-    version='0.0.4',
+    version='0.0.5',
     license='BSD-2-Clause',
     description='A simple python tool for calculating ratios used to measure portfolio performance.',
     long_description='%s\n%s\n%s' % (
