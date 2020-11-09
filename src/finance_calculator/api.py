@@ -346,11 +346,13 @@ def get_ratio_calculator(
     nav_data, benchmark_nav_data=None, risk_free_rate=None, annualiser=250
 ):
     """
-    returns a ratio calculator instance which can be used to call functions as below
+    returns a ratio calculator instance which can be used to call functions as below::
+
     >>> import finance_calculator as fc
     >>> rc = fc.get_ratio_calculator(nav_data, benchmark_nav_data)
     >>> beta_df = rc.get_beta(window=250*3)
     >>> alpha_df = rc.get_alpha(window=250*3)
+
     benefit is that the data pre processing would not happen multiple time if you have to get
     multiple ratios on the same data-set. You need to pass window value separately for each function
 
